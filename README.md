@@ -1,4 +1,4 @@
-[sistem_absensi_pengenalan_wajah_fixed(1).html](https://github.com/user-attachments/files/32645052/sistem_absensi_pengenalan_wajah_fixed.1.html)[sistem_absensi_pengenalan_wajah_fixed(1).html](https://github.com/user-attachments/files/32645065/sistem_absensi_pengenalan_wajah_fixed.1.html)
+[sistem_absensi_pengenalan_wajah(8).html](https://github.com/user-attachments/files/32645512/sistem_absensi_pengenalan_wajah.8.html)
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,9 +7,7 @@
     <title>Sistem Absensi Pengenalan Wajah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Konfigurasi Tailwind untuk mengaktifkan class-based dark mode
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -28,19 +26,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; font-weight: 500; }
-        
-        /* Enhanced contrast and anti-glare soft gray background */
-        .dark body { color: #f3f4f6 !important; background-color: #0f172a !important; }
-        body { color: #111827; background-color: #f1f5f9; } /* Soft slate-100 instead of bright white */
+        body { font-family: 'Inter', sans-serif; font-weight: 500; color: #f8fafc; background-color: #090d16; }
 
-        /* Anti-flicker: sembunyikan halaman sampai class warna dari Tailwind CDN
-           selesai diterapkan, agar tidak sempat terlihat tampilan mentah/kacau
-           saat halaman baru dimuat (terutama di koneksi GitHub Pages yang lebih lambat). */
-        html { visibility: hidden; opacity: 0; }
-        html.tw-ready { visibility: visible; opacity: 1; transition: opacity 0.15s ease-in; }
-
-        .video-container { position: relative; width: 100%; max-width: 640px; margin: 0 auto; border-radius: 0.75rem; overflow: hidden; background: #000; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .video-container { position: relative; width: 100%; max-width: 640px; margin: 0 auto; border-radius: 0.75rem; overflow: hidden; background: #000; box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5); }
         video, canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .video-placeholder { padding-top: 75%; }
         
@@ -48,7 +36,7 @@
             visibility: hidden; min-width: 250px; background-color: #059669; color: #fff;
             text-align: center; border-radius: 8px; padding: 16px; position: fixed;
             z-index: 50; left: 50%; bottom: 30px; transform: translateX(-50%);
-            font-size: 15px; font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+            font-size: 15px; font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
             opacity: 0; transition: opacity 0.3s, bottom 0.3s;
         }
         .toast.show { visibility: visible; opacity: 1; bottom: 50px; }
@@ -69,77 +57,53 @@
             * { color: black !important; background-color: transparent !important; }
         }
     </style>
-    <script>
-        // Inisialisasi Mode Gelap agar tidak ada flash saat reload
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
-    <script>
-        // Tampilkan kembali halaman setelah Tailwind CDN selesai menerapkan
-        // semua class warna/layout (mencegah tampilan mentah/kacau sesaat).
-        function revealPage() {
-            document.documentElement.classList.add('tw-ready');
-        }
-        window.addEventListener('DOMContentLoaded', function () {
-            requestAnimationFrame(function () {
-                requestAnimationFrame(revealPage);
-            });
-        });
-        // Pengaman: kalau karena suatu hal event di atas tidak sempat jalan
-        // (misal koneksi sangat lambat), tetap tampilkan setelah 1.5 detik
-        // agar halaman tidak macet kosong.
-        setTimeout(revealPage, 1500);
-    </script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300 antialiased font-medium">
+<body class="bg-[#090d16] text-slate-100 antialiased font-medium">
 
-    <div id="loginScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center text-white p-4">
-        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-center relative overflow-hidden font-medium">
+    <div id="loginScreen" class="fixed inset-0 bg-[#060911] z-50 flex flex-col items-center justify-center text-white p-4">
+        <div class="bg-[#111827] p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-800 text-slate-100 text-center relative overflow-hidden font-medium">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
-            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/60 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-700 dark:text-blue-400 text-2xl shadow-inner font-bold">
+            <div class="w-16 h-16 bg-blue-950 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400 text-2xl shadow-inner font-bold border border-blue-800">
                 <i class="fas fa-shield-alt"></i>
             </div>
-            <h2 class="text-2xl font-black mb-1 text-slate-900 dark:text-white">Akses Terbatas</h2>
-            <p class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-6">Masukkan kata sandi aplikasi untuk melanjutkan ke sistem absensi.</p>
+            <h2 class="text-2xl font-black mb-1 text-slate-100">Akses Terbatas</h2>
+            <p class="text-xs font-bold text-slate-400 mb-6">Masukkan kata sandi aplikasi untuk melanjutkan ke sistem absensi.</p>
             
             <div class="mb-4 text-left">
-                <label class="block text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-1 uppercase tracking-wider">Kata Sandi Akses</label>
+                <label class="block text-xs font-extrabold text-slate-300 mb-1 uppercase tracking-wider">Kata Sandi Akses</label>
                 <div class="relative">
-                    <input type="password" id="loginPasswordInput" placeholder="Masukkan Password..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-colors pr-10 text-sm font-bold">
-                    <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+                    <input type="password" id="loginPasswordInput" placeholder="Masukkan Password..." class="w-full px-4 py-3 bg-[#1f2937] border border-slate-700 text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-colors pr-10 text-sm font-bold placeholder-slate-500">
+                    <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
                         <i class="fas fa-eye" id="eyeIcon"></i>
                     </button>
                 </div>
             </div>
 
-            <button onclick="verifyLoginPassword()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center transition-colors mb-4">
+            <button onclick="verifyLoginPassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center transition-colors mb-4">
                 <i class="fas fa-sign-in-alt mr-2"></i> Masuk Aplikasi
             </button>
 
             <!-- Keterangan & Kontak Admin -->
-            <div class="border-t border-slate-300 dark:border-slate-700 pt-4 mt-2">
-                <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-3">
+            <div class="border-t border-slate-800 pt-4 mt-2">
+                <p class="text-xs font-bold text-slate-400 mb-3">
                     Hubungi admin untuk mendapatkan password:
                 </p>
                 <div class="flex justify-center items-center gap-4 text-xl">
                     <!-- WhatsApp Admin -->
-                    <a href="https://wa.me/6285397772345" target="_blank" class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold" title="WhatsApp: 085397772345">
+                    <a href="https://wa.me/6285397772345" target="_blank" class="w-10 h-10 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold border border-emerald-800" title="WhatsApp: 085397772345">
                         <i class="fab fa-whatsapp"></i>
                     </a>
                     <!-- Instagram Admin -->
-                    <a href="https://instagram.com/aes_435" target="_blank" class="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900/50 text-pink-700 dark:text-pink-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold" title="Instagram: @aes_435">
+                    <a href="https://instagram.com/aes_435" target="_blank" class="w-10 h-10 rounded-full bg-pink-950 text-pink-400 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold border border-pink-800" title="Instagram: @aes_435">
                         <i class="fab fa-instagram"></i>
                     </a>
                     <!-- TikTok Admin -->
-                    <a href="https://tiktok.com/@aes_435" target="_blank" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold" title="TikTok: @aes_435">
+                    <a href="https://tiktok.com/@aes_435" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:scale-110 transition-transform shadow-sm font-bold border border-slate-700" title="TikTok: @aes_435">
                         <i class="fab fa-tiktok"></i>
                     </a>
                 </div>
                 
-                <div class="mt-4 text-[10px] text-slate-600 dark:text-slate-400 font-black tracking-wider uppercase">
+                <div class="mt-4 text-[10px] text-slate-500 font-black tracking-wider uppercase">
                     Aplikasi ini dibuat oleh AES
                 </div>
             </div>
@@ -148,36 +112,33 @@
 
     <div id="app-container" class="hidden font-medium">
         <!-- Loading Overlay -->
-        <div id="loadingOverlay" class="fixed inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center text-white">
+        <div id="loadingOverlay" class="fixed inset-0 bg-[#060911]/95 z-50 flex flex-col items-center justify-center text-white">
             <i class="fas fa-spinner fa-spin text-5xl mb-4 text-blue-500"></i>
-            <h2 class="text-2xl font-black mb-2 text-white">Memuat Model AI...</h2>
-            <p class="text-slate-200 text-center px-4 font-bold">Sistem sedang memuat model pengenalan wajah.<br>Mohon tunggu sebentar.</p>
+            <h2 class="text-2xl font-black mb-2 text-slate-100">Memuat Model AI...</h2>
+            <p class="text-slate-400 text-center px-4 font-bold">Sistem sedang memuat model pengenalan wajah.<br>Mohon tunggu sebentar.</p>
         </div>
 
         <div class="max-w-6xl mx-auto px-4 py-8">
             <div class="top-controls-container flex justify-end mb-2 gap-2">
-                <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center shadow-sm">
-                    <i class="fas fa-moon mr-2" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span>
-                </button>
-                <button onclick="toggleFullScreen()" id="fullscreenBtn" class="bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center shadow-sm">
+                <button onclick="toggleFullScreen()" id="fullscreenBtn" class="bg-[#111827] hover:bg-[#1f2937] text-slate-200 border border-slate-800 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center shadow-sm">
                     <i class="fas fa-expand mr-2"></i> Fullscreen
                 </button>
             </div>
             
             <header class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-black text-blue-700 dark:text-blue-400 mb-2 tracking-tight"><i class="fas fa-id-badge mr-2"></i>Absensi Wajah Cerdas</h1>
-                <p class="text-slate-700 dark:text-slate-300 font-bold text-sm md:text-base">Sistem presensi otomatis dengan Export/Import Data Kelas — <span class="text-xs font-black text-purple-700 dark:text-purple-400 bg-purple-100 dark:bg-purple-950 px-2 py-0.5 rounded border border-purple-300 dark:border-purple-800">Created by AES</span></p>
+                <h1 class="text-3xl md:text-4xl font-black text-blue-400 mb-2 tracking-tight"><i class="fas fa-id-badge mr-2"></i>Absensi Wajah Cerdas</h1>
+                <p class="text-slate-400 font-bold text-sm md:text-base">Sistem presensi otomatis dengan Export/Import Data Kelas — <span class="text-xs font-black text-purple-400 bg-purple-950 px-2 py-0.5 rounded border border-purple-800">Created by AES</span></p>
             </header>
 
-            <div class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden transition-colors duration-300">
-                <div class="flex border-b border-slate-300 dark:border-slate-700 bg-slate-200 dark:bg-slate-900/50">
-                    <button id="tabRegister" class="flex-1 py-4 text-center font-black text-blue-700 dark:text-blue-400 border-b-2 border-blue-700 dark:border-blue-400 bg-white dark:bg-slate-800 transition-colors focus:outline-none text-xs md:text-sm shadow-sm" onclick="switchTab('register')">
+            <div class="bg-[#111827] border border-slate-800 rounded-xl shadow-2xl overflow-hidden transition-colors duration-300">
+                <div class="flex border-b border-slate-800 bg-[#0d131f]">
+                    <button id="tabRegister" class="flex-1 py-4 text-center font-black text-blue-400 border-b-2 border-blue-500 bg-[#111827] transition-colors focus:outline-none text-xs md:text-sm shadow-sm" onclick="switchTab('register')">
                         <i class="fas fa-database mr-2"></i> Kelola Data Siswa
                     </button>
-                    <button id="tabAttendance" class="flex-1 py-4 text-center font-bold text-slate-700 dark:text-slate-300 border-b-2 border-transparent hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors focus:outline-none text-xs md:text-sm" onclick="switchTab('attendance')">
+                    <button id="tabAttendance" class="flex-1 py-4 text-center font-bold text-slate-400 border-b-2 border-transparent hover:bg-[#161f30] transition-colors focus:outline-none text-xs md:text-sm" onclick="switchTab('attendance')">
                         <i class="fas fa-camera mr-2"></i> Mode Absensi
                     </button>
-                    <button id="tabRecap" class="flex-1 py-4 text-center font-bold text-slate-700 dark:text-slate-300 border-b-2 border-transparent hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors focus:outline-none text-xs md:text-sm" onclick="switchTab('recap')">
+                    <button id="tabRecap" class="flex-1 py-4 text-center font-bold text-slate-400 border-b-2 border-transparent hover:bg-[#161f30] transition-colors focus:outline-none text-xs md:text-sm" onclick="switchTab('recap')">
                         <i class="fas fa-chart-bar mr-2"></i> Rekap Laporan
                     </button>
                 </div>
@@ -187,14 +148,14 @@
                         
                         <!-- Video Container with Manual Start Overlay -->
                         <div class="w-full mb-4">
-                            <div class="video-container relative border border-slate-300 dark:border-slate-700" id="videoContainer">
+                            <div class="video-container relative border border-slate-800" id="videoContainer">
                                 <div class="video-placeholder"></div>
                                 <video id="video" autoplay muted playsinline></video>
                                 <canvas id="canvas"></canvas>
                                 
-                                <div id="cameraOverlay" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center z-10 p-4">
-                                    <i class="fas fa-video-slash text-4xl text-slate-400 mb-4"></i>
-                                    <p class="text-slate-200 text-sm mb-4 text-center font-medium">Atur kelas & JSON di panel kanan terlebih dahulu.<br>Klik tombol di bawah jika siap merekam wajah.</p>
+                                <div id="cameraOverlay" class="absolute inset-0 bg-[#0b101b] flex flex-col items-center justify-center z-10 p-4">
+                                    <i class="fas fa-video-slash text-4xl text-slate-600 mb-4"></i>
+                                    <p class="text-slate-400 text-sm mb-4 text-center font-medium">Atur kelas & JSON di panel kanan terlebih dahulu.<br>Klik tombol di bawah jika siap merekam wajah.</p>
                                     <button onclick="turnOnCamera()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md font-bold transition-colors">
                                         <i class="fas fa-power-off mr-2"></i> Nyalakan Kamera
                                     </button>
@@ -203,25 +164,25 @@
                         </div>
 
                         <div id="registerControls" class="w-full max-w-sm flex flex-col gap-3">
-                            <input type="text" id="studentName" placeholder="Nama Lengkap Siswa" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-colors font-bold text-sm placeholder-slate-400">
-                            <input type="text" id="studentClass" placeholder="Kelas (Cth: X RPL 1)" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-colors font-bold text-sm placeholder-slate-400">
-                            <button onclick="registerStudent()" id="btnRegister" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center transition-colors">
+                            <input type="text" id="studentName" placeholder="Nama Lengkap Siswa" class="w-full px-4 py-3 bg-[#1f2937] border border-slate-700 text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-colors font-bold text-sm placeholder-slate-500">
+                            <input type="text" id="studentClass" placeholder="Kelas (Cth: X RPL 1)" class="w-full px-4 py-3 bg-[#1f2937] border border-slate-700 text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-colors font-bold text-sm placeholder-slate-500">
+                            <button onclick="registerStudent()" id="btnRegister" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center transition-colors">
                                 <i class="fas fa-camera-retro mr-2"></i> Rekam Wajah
                             </button>
                         </div>
 
                         <div id="attendanceControls" class="w-full max-w-sm hidden flex-col items-center gap-3">
-                            <div class="bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-300 px-4 py-3 rounded-xl w-full text-center font-black animate-pulse text-sm shadow-sm">
+                            <div class="bg-emerald-950 border border-emerald-800 text-emerald-300 px-4 py-3 rounded-xl w-full text-center font-black animate-pulse text-sm shadow-sm">
                                 <i class="fas fa-expand mr-2"></i> Deteksi Wajah Aktif...
                             </div>
                             <!-- Slider Sensitivitas -->
-                            <div class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 p-4 rounded-xl mt-2 transition-colors shadow-sm font-bold">
-                                <label for="accuracySlider" class="block text-xs font-black text-slate-900 dark:text-slate-100 mb-2 flex justify-between items-center">
-                                    <span><i class="fas fa-sliders-h mr-1 text-blue-600"></i> Ketatnya Deteksi</span>
-                                    <span id="accuracyLabel" class="text-blue-700 dark:text-blue-400 font-black bg-blue-100 dark:bg-blue-950 px-2 py-0.5 rounded border border-blue-300 dark:border-blue-800">0.43</span>
+                            <div class="w-full bg-[#161f30] border border-slate-800 p-4 rounded-xl mt-2 transition-colors shadow-sm font-bold">
+                                <label for="accuracySlider" class="block text-xs font-black text-slate-300 mb-2 flex justify-between items-center">
+                                    <span><i class="fas fa-sliders-h mr-1 text-blue-400"></i> Ketatnya Deteksi</span>
+                                    <span id="accuracyLabel" class="text-blue-400 font-black bg-blue-950 px-2 py-0.5 rounded border border-blue-800">0.43</span>
                                 </label>
-                                <input type="range" id="accuracySlider" min="0.30" max="0.60" step="0.01" value="0.43" class="w-full h-2 bg-slate-300 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" onchange="updateAccuracy(this.value)">
-                                <div class="flex justify-between text-[11px] text-slate-700 dark:text-slate-400 mt-1 font-bold">
+                                <input type="range" id="accuracySlider" min="0.30" max="0.60" step="0.01" value="0.43" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" onchange="updateAccuracy(this.value)">
+                                <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-bold">
                                     <span>Lebih Ketat</span>
                                     <span>Lebih Longgar</span>
                                 </div>
@@ -233,31 +194,31 @@
                         
                         <!-- Panel: Siswa Terdaftar -->
                         <div id="registeredListSection" class="h-full flex flex-col">
-                            <h3 class="text-lg font-black mb-3 text-slate-900 dark:text-slate-100 flex items-center justify-between">
-                                <span><i class="fas fa-users mr-2 text-blue-700 dark:text-blue-400"></i>Siswa Terdaftar</span>
-                                <span id="registeredCount" class="bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-300 text-xs font-black px-3 py-1 rounded-full border border-blue-300 dark:border-blue-800">0</span>
+                            <h3 class="text-lg font-black mb-3 text-slate-100 flex items-center justify-between">
+                                <span><i class="fas fa-users mr-2 text-blue-400"></i>Siswa Terdaftar</span>
+                                <span id="registeredCount" class="bg-blue-950 text-blue-300 text-xs font-black px-3 py-1 rounded-full border border-blue-800">0</span>
                             </h3>
                             
                             <!-- Backup/Restore Controls -->
                             <div class="mb-3 grid grid-cols-2 gap-2">
-                                <button onclick="exportJSON()" class="bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white py-2.5 px-3 rounded-xl text-xs font-bold transition-colors flex justify-center items-center shadow-sm" title="Backup Siswa & Log Absensi">
+                                <button onclick="exportJSON()" class="bg-[#1f2937] hover:bg-slate-700 text-slate-200 border border-slate-700 py-2.5 px-3 rounded-xl text-xs font-bold transition-colors flex justify-center items-center shadow-sm" title="Backup Siswa & Log Absensi">
                                     <i class="fas fa-file-export mr-2 text-blue-400"></i> Backup JSON
                                 </button>
-                                <button onclick="document.getElementById('importJSON').click()" class="bg-amber-600 hover:bg-amber-700 text-white py-2.5 px-3 rounded-xl text-xs font-bold transition-colors flex justify-center items-center shadow-sm" title="Restore Siswa & Log Absensi">
-                                    <i class="fas fa-file-import mr-2 text-amber-200"></i> Restore JSON
+                                <button onclick="document.getElementById('importJSON').click()" class="bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-800 py-2.5 px-3 rounded-xl text-xs font-bold transition-colors flex justify-center items-center shadow-sm" title="Restore Siswa & Log Absensi">
+                                    <i class="fas fa-file-import mr-2 text-amber-400"></i> Restore JSON
                                 </button>
                                 <input type="file" id="importJSON" accept=".json" class="hidden" onchange="importJSON(event)">
                             </div>
                             
                             <div class="mb-3">
-                                <select id="filterClassReg" onchange="updateUIList()" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-600 transition-colors shadow-sm">
+                                <select id="filterClassReg" onchange="updateUIList()" class="w-full px-3.5 py-2.5 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm">
                                     <option value="ALL">Semua Kelas</option>
                                 </select>
                             </div>
                             
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl overflow-y-auto max-h-[380px] relative transition-colors shadow-inner">
-                                <table class="w-full text-xs text-left text-slate-900 dark:text-slate-100 font-bold">
-                                    <thead class="text-[11px] text-slate-900 dark:text-slate-100 uppercase bg-slate-200 dark:bg-slate-700 font-black sticky top-0 z-10 transition-colors">
+                            <div class="flex-1 bg-[#0b101b] border border-slate-800 rounded-xl overflow-y-auto max-h-[380px] relative transition-colors shadow-inner">
+                                <table class="w-full text-xs text-left text-slate-200 font-bold">
+                                    <thead class="text-[11px] text-slate-400 uppercase bg-[#161f30] font-black sticky top-0 z-10 transition-colors border-b border-slate-800">
                                         <tr>
                                             <th scope="col" class="px-3 py-3 w-12 text-center">No</th>
                                             <th scope="col" class="px-3 py-3">Nama Siswa</th>
@@ -269,8 +230,8 @@
                                         <!-- Data tabel siswa akan dimuat di sini via JavaScript -->
                                     </tbody>
                                 </table>
-                                <div id="emptyRegistered" class="text-center text-slate-500 dark:text-slate-400 py-12 hidden absolute w-full top-10 font-bold">
-                                    <i class="fas fa-inbox text-4xl mb-2 text-slate-400 dark:text-slate-600"></i>
+                                <div id="emptyRegistered" class="text-center text-slate-500 py-12 hidden absolute w-full top-10 font-bold">
+                                    <i class="fas fa-inbox text-4xl mb-2 text-slate-600"></i>
                                     <p class="text-xs">Belum ada siswa.</p>
                                 </div>
                             </div>
@@ -278,30 +239,30 @@
 
                         <!-- Panel: Log Absensi Hari Ini -->
                         <div id="attendanceListSection" class="h-full hidden flex-col">
-                            <h3 class="text-lg font-black mb-3 text-slate-900 dark:text-slate-100 flex items-center justify-between">
-                                <span><i class="fas fa-clipboard-list mr-2 text-emerald-700 dark:text-emerald-400"></i>Log Kehadiran</span>
+                            <h3 class="text-lg font-black mb-3 text-slate-100 flex items-center justify-between">
+                                <span><i class="fas fa-clipboard-list mr-2 text-emerald-400"></i>Log Kehadiran</span>
                             </h3>
                             
                             <div class="mb-3 grid grid-cols-2 gap-2">
-                                <input type="date" id="inputDate" onchange="updateUIList()" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm">
-                                <input type="text" id="inputMapel" onchange="updateUIList()" onkeyup="updateUIList()" placeholder="Mata Pelajaran" value="Umum" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm placeholder-slate-400">
+                                <input type="date" id="inputDate" onchange="updateUIList()" class="w-full px-3 py-2 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm">
+                                <input type="text" id="inputMapel" onchange="updateUIList()" onkeyup="updateUIList()" placeholder="Mata Pelajaran" value="Umum" class="w-full px-3 py-2 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm placeholder-slate-500">
                             </div>
                             
                             <div class="mb-3 flex gap-2">
-                                <select id="filterClassAtt" onchange="updateUIList()" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm">
+                                <select id="filterClassAtt" onchange="updateUIList()" class="w-full px-3 py-2.5 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 transition-colors shadow-sm">
                                     <option value="ALL">Semua Kelas</option>
                                 </select>
-                                <button onclick="downloadWord()" class="bg-blue-700 hover:bg-blue-800 text-white px-3.5 py-2.5 rounded-xl text-xs font-black transition-colors flex items-center shadow-sm whitespace-nowrap" title="Unduh Daftar Hadir (Word)">
+                                <button onclick="downloadWord()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-black transition-colors flex items-center shadow-sm whitespace-nowrap" title="Unduh Daftar Hadir (Word)">
                                     <i class="fas fa-file-word"></i>
                                 </button>
-                                <button onclick="sendToWhatsApp()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2.5 rounded-xl text-xs font-black transition-colors flex items-center shadow-sm whitespace-nowrap" title="Kirim Laporan ke WhatsApp">
+                                <button onclick="sendToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-black transition-colors flex items-center shadow-sm whitespace-nowrap" title="Kirim Laporan ke WhatsApp">
                                     <i class="fab fa-whatsapp text-sm"></i>
                                 </button>
                             </div>
                             
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl overflow-y-auto max-h-[380px] relative transition-colors shadow-inner">
-                                <table class="w-full text-xs text-left text-slate-900 dark:text-slate-100 font-bold">
-                                    <thead class="text-[11px] text-slate-900 dark:text-slate-100 uppercase bg-slate-200 dark:bg-slate-700 font-black sticky top-0 z-10 transition-colors">
+                            <div class="flex-1 bg-[#0b101b] border border-slate-800 rounded-xl overflow-y-auto max-h-[380px] relative transition-colors shadow-inner">
+                                <table class="w-full text-xs text-left text-slate-200 font-bold">
+                                    <thead class="text-[11px] text-slate-400 uppercase bg-[#161f30] font-black sticky top-0 z-10 transition-colors border-b border-slate-800">
                                         <tr>
                                             <th scope="col" class="px-3 py-3 w-12 text-center">No</th>
                                             <th scope="col" class="px-3 py-3">Nama Siswa</th>
@@ -313,8 +274,8 @@
                                         <!-- Log absensi akan dimuat di sini -->
                                     </tbody>
                                 </table>
-                                <div id="emptyAttendance" class="text-center text-slate-500 dark:text-slate-400 py-12 hidden absolute w-full top-10 font-bold">
-                                    <i class="fas fa-clipboard-check text-4xl mb-2 text-slate-400 dark:text-slate-600"></i>
+                                <div id="emptyAttendance" class="text-center text-slate-500 py-12 hidden absolute w-full top-10 font-bold">
+                                    <i class="fas fa-clipboard-check text-4xl mb-2 text-slate-600"></i>
                                     <p class="text-xs">Belum ada data kehadiran<br>untuk tanggal/mapel ini.</p>
                                 </div>
                             </div>
@@ -322,37 +283,37 @@
 
                         <!-- Panel: Rekapitulasi Kehadiran -->
                         <div id="recapSection" class="h-full hidden flex-col w-full">
-                            <h3 class="text-lg font-black mb-3 text-slate-900 dark:text-slate-100 flex items-center">
-                                <i class="fas fa-chart-bar mr-2 text-purple-700 dark:text-purple-400"></i> Rekapitulasi Kehadiran Mingguan/Bulanan
+                            <h3 class="text-lg font-black mb-3 text-slate-100 flex items-center">
+                                <i class="fas fa-chart-bar mr-2 text-purple-400"></i> Rekapitulasi Kehadiran Mingguan/Bulanan
                             </h3>
                             
-                            <div class="mb-4 flex flex-col md:flex-row gap-3 bg-purple-100/70 dark:bg-purple-950/40 p-4 rounded-xl border border-purple-300 dark:border-purple-800 transition-colors items-end shadow-sm font-bold">
+                            <div class="mb-4 flex flex-col md:flex-row gap-3 bg-[#161f30] p-4 rounded-xl border border-purple-900/50 transition-colors items-end shadow-sm font-bold">
                                 <div class="flex-1 w-full">
-                                    <label class="text-xs font-black text-slate-900 dark:text-slate-100 mb-1 block">Pilih Kelas</label>
-                                    <select id="recapClassFilter" onchange="generateRecapTable()" class="w-full px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"></select>
+                                    <label class="text-xs font-black text-slate-300 mb-1 block">Pilih Kelas</label>
+                                    <select id="recapClassFilter" onchange="generateRecapTable()" class="w-full px-3 py-2.5 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"></select>
                                 </div>
                                 <div class="flex-1 w-full">
-                                    <label class="text-xs font-black text-slate-900 dark:text-slate-100 mb-1 block">Pilih Mata Pelajaran</label>
-                                    <select id="recapMapelFilter" onchange="generateRecapTable()" class="w-full px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"></select>
+                                    <label class="text-xs font-black text-slate-300 mb-1 block">Pilih Mata Pelajaran</label>
+                                    <select id="recapMapelFilter" onchange="generateRecapTable()" class="w-full px-3 py-2.5 bg-[#1f2937] border border-slate-700 text-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"></select>
                                 </div>
                                 <div class="w-full md:w-auto">
-                                    <button onclick="downloadRecapWord()" class="w-full md:w-auto bg-purple-700 hover:bg-purple-800 text-white px-4 py-2.5 rounded-xl text-xs font-black transition-colors shadow-md flex items-center justify-center whitespace-nowrap">
+                                    <button onclick="downloadRecapWord()" class="w-full md:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl text-xs font-black transition-colors shadow-md flex items-center justify-center whitespace-nowrap">
                                         <i class="fas fa-file-word mr-2"></i> Unduh Rekap Word
                                     </button>
                                 </div>
                             </div>
                             
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl overflow-x-auto overflow-y-auto max-h-[400px] relative transition-colors shadow-inner">
-                                <table class="w-full text-xs text-left text-slate-900 dark:text-slate-100 font-bold min-w-max">
-                                    <thead id="recapTableHeader" class="text-[11px] text-slate-900 dark:text-slate-100 uppercase bg-slate-200 dark:bg-slate-700 font-black sticky top-0 z-20 shadow-sm">
+                            <div class="flex-1 bg-[#0b101b] border border-slate-800 rounded-xl overflow-x-auto overflow-y-auto max-h-[400px] relative transition-colors shadow-inner">
+                                <table class="w-full text-xs text-left text-slate-200 font-bold min-w-max">
+                                    <thead id="recapTableHeader" class="text-[11px] text-slate-400 uppercase bg-[#161f30] font-black sticky top-0 z-20 shadow-sm border-b border-slate-800">
                                         <!-- Header Dinamis -->
                                     </thead>
                                     <tbody id="recapTableBody" class="font-bold">
                                         <!-- Data Dinamis -->
                                     </tbody>
                                 </table>
-                                <div id="emptyRecap" class="text-center text-slate-500 dark:text-slate-400 py-12 hidden font-bold">
-                                    <i class="fas fa-folder-open text-5xl mb-3 text-slate-400 dark:text-slate-600"></i>
+                                <div id="emptyRecap" class="text-center text-slate-500 py-12 hidden font-bold">
+                                    <i class="fas fa-folder-open text-5xl mb-3 text-slate-600"></i>
                                     <p class="text-xs">Pilih kelas dan mata pelajaran untuk melihat rekap.</p>
                                 </div>
                             </div>
@@ -365,36 +326,36 @@
     </div>
 
     <!-- Modal Edit Siswa -->
-    <div id="editModal" class="fixed inset-0 bg-slate-950/70 z-50 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity p-4 font-bold">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl w-full max-w-md border border-slate-300 dark:border-slate-700">
-            <h3 class="text-lg font-black mb-4 text-slate-900 dark:text-white flex items-center"><i class="fas fa-user-edit text-blue-700 dark:text-blue-400 mr-2"></i>Edit Data Siswa</h3>
+    <div id="editModal" class="fixed inset-0 bg-[#060911]/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity p-4 font-bold">
+        <div class="bg-[#111827] p-6 rounded-2xl shadow-2xl w-full max-w-md border border-slate-800 text-slate-100">
+            <h3 class="text-lg font-black mb-4 text-slate-100 flex items-center"><i class="fas fa-user-edit text-blue-400 mr-2"></i>Edit Data Siswa</h3>
             <input type="hidden" id="editStudentId">
             <div class="mb-4">
-                <label class="block text-xs font-black text-slate-900 dark:text-slate-100 mb-1 uppercase tracking-wider">Nama Lengkap</label>
-                <input type="text" id="editStudentName" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-colors text-sm font-bold">
+                <label class="block text-xs font-black text-slate-300 mb-1 uppercase tracking-wider">Nama Lengkap</label>
+                <input type="text" id="editStudentName" class="w-full px-4 py-3 bg-[#1f2937] border border-slate-700 text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-colors text-sm font-bold">
             </div>
             <div class="mb-6">
-                <label class="block text-xs font-black text-slate-900 dark:text-slate-100 mb-1 uppercase tracking-wider">Kelas</label>
-                <input type="text" id="editStudentClass" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-colors text-sm font-bold">
+                <label class="block text-xs font-black text-slate-300 mb-1 uppercase tracking-wider">Kelas</label>
+                <input type="text" id="editStudentClass" class="w-full px-4 py-3 bg-[#1f2937] border border-slate-700 text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-colors text-sm font-bold">
             </div>
             <div class="flex justify-end gap-3">
-                <button onclick="closeEditModal()" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-xl hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors font-black text-xs">Batal</button>
-                <button onclick="saveEditStudent()" class="px-4 py-2.5 bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors font-black shadow-md text-xs">Simpan Perubahan</button>
+                <button onclick="closeEditModal()" class="px-4 py-2.5 bg-[#1f2937] text-slate-300 rounded-xl hover:bg-slate-700 transition-colors font-black text-xs">Batal</button>
+                <button onclick="saveEditStudent()" class="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-black shadow-md text-xs">Simpan Perubahan</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div id="deleteModal" class="fixed inset-0 bg-slate-950/70 z-50 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity p-4 font-bold">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-300 dark:border-slate-700 text-center">
-            <div class="w-16 h-16 bg-red-100 dark:bg-red-950/60 rounded-full flex items-center justify-center mx-auto mb-4 text-red-700 dark:text-red-400 text-3xl font-bold">
+    <div id="deleteModal" class="fixed inset-0 bg-[#060911]/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity p-4 font-bold">
+        <div class="bg-[#111827] p-6 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-800 text-center text-slate-100">
+            <div class="w-16 h-16 bg-red-950 rounded-full flex items-center justify-center mx-auto mb-4 text-red-400 text-3xl font-bold border border-red-800">
                 <i class="fas fa-trash-alt"></i>
             </div>
-            <h3 class="text-lg font-black mb-2 text-slate-900 dark:text-white">Hapus Data Siswa?</h3>
-            <p class="text-slate-700 dark:text-slate-300 mb-6 text-xs font-bold leading-relaxed">Profil wajah siswa akan dihapus dari sistem. Tindakan ini tidak dapat dibatalkan.</p>
+            <h3 class="text-lg font-black mb-2 text-slate-100">Hapus Data Siswa?</h3>
+            <p class="text-slate-400 mb-6 text-xs font-bold leading-relaxed">Profil wajah siswa akan dihapus dari sistem. Tindakan ini tidak dapat dibatalkan.</p>
             <input type="hidden" id="deleteStudentId">
             <div class="flex justify-center gap-3">
-                <button onclick="closeDeleteModal()" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-xl hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors font-black text-xs w-full">Batal</button>
+                <button onclick="closeDeleteModal()" class="px-4 py-2.5 bg-[#1f2937] text-slate-300 rounded-xl hover:bg-slate-700 transition-colors font-black text-xs w-full">Batal</button>
                 <button onclick="confirmDeleteStudent()" class="px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-black text-xs w-full">Ya, Hapus</button>
             </div>
         </div>
@@ -455,7 +416,6 @@
 
         async function init() {
             loadDataFromStorage();
-            updateDarkModeIcon(document.documentElement.classList.contains('dark'));
             
             const today = new Date();
             const offset = today.getTimezoneOffset() * 60000;
@@ -487,27 +447,6 @@
                     <h2 class="text-2xl font-bold mb-2">Gagal Memuat</h2>
                     <p class="text-slate-300 text-center px-4">Pastikan perangkat memiliki kamera dan izin diberikan.</p>
                 `;
-            }
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const isDark = html.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateDarkModeIcon(isDark);
-        }
-
-        function updateDarkModeIcon(isDark) {
-            const icon = document.getElementById('darkModeIcon');
-            const text = document.getElementById('darkModeText');
-            if(icon && text) {
-                if (isDark) {
-                    icon.className = 'fas fa-sun text-amber-400 mr-2';
-                    text.textContent = 'Light Mode';
-                } else {
-                    icon.className = 'fas fa-moon mr-2';
-                    text.textContent = 'Dark Mode';
-                }
             }
         }
 
@@ -550,9 +489,9 @@
             const leftPanel = document.getElementById('leftPanel');
             const rightPanel = document.getElementById('rightPanel');
 
-            const activeTabStyle = 'flex-1 py-4 text-center font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-white dark:bg-slate-800 transition-colors focus:outline-none text-xs md:text-sm';
-            const activeRecapTabStyle = 'flex-1 py-4 text-center font-bold text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400 bg-white dark:bg-slate-800 transition-colors focus:outline-none text-xs md:text-sm';
-            const inactiveTabStyle = 'flex-1 py-4 text-center font-bold text-slate-600 dark:text-slate-300 border-b-2 border-transparent hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors focus:outline-none text-xs md:text-sm';
+            const activeTabStyle = 'flex-1 py-4 text-center font-bold text-blue-400 border-b-2 border-blue-500 bg-[#111827] transition-colors focus:outline-none text-xs md:text-sm';
+            const activeRecapTabStyle = 'flex-1 py-4 text-center font-bold text-purple-400 border-b-2 border-purple-500 bg-[#111827] transition-colors focus:outline-none text-xs md:text-sm';
+            const inactiveTabStyle = 'flex-1 py-4 text-center font-bold text-slate-400 border-b-2 border-transparent hover:bg-[#161f30] transition-colors focus:outline-none text-xs md:text-sm';
 
             tabRegister.className = inactiveTabStyle;
             tabAttendance.className = inactiveTabStyle;
@@ -872,19 +811,19 @@
             
             [...filteredStudents].reverse().forEach((student, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "bg-white dark:bg-slate-800 border-b border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors font-bold";
+                tr.className = "bg-[#111827] border-b border-slate-800 hover:bg-[#1f2937] transition-colors font-bold";
                 tr.innerHTML = `
-                    <td class="px-3 py-3 text-center font-black text-slate-900 dark:text-slate-100">${index + 1}</td>
-                    <td class="px-3 py-3 font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/60 flex items-center justify-center text-blue-800 dark:text-blue-400 font-black shrink-0 text-xs shadow-sm">${student.name.charAt(0).toUpperCase()}</div>
+                    <td class="px-3 py-3 text-center font-black text-slate-300">${index + 1}</td>
+                    <td class="px-3 py-3 font-black text-slate-100 flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-blue-950 border border-blue-800 flex items-center justify-center text-blue-300 font-black shrink-0 text-xs shadow-sm">${student.name.charAt(0).toUpperCase()}</div>
                         ${student.name}
                     </td>
                     <td class="px-3 py-3">
-                        <span class="text-[11px] bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-300 px-2.5 py-1 rounded-md font-black whitespace-nowrap border border-blue-300 dark:border-blue-800">${student.className || '-'}</span>
+                        <span class="text-[11px] bg-blue-950 text-blue-300 px-2.5 py-1 rounded-md font-black whitespace-nowrap border border-blue-800">${student.className || '-'}</span>
                     </td>
                     <td class="px-3 py-3 text-center flex justify-center gap-1">
-                        <button onclick="openEditModal('${student.id}')" class="text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 p-1.5 transition-colors rounded-lg hover:bg-blue-100 dark:hover:bg-blue-950 font-bold" title="Edit Siswa"><i class="fas fa-edit"></i></button>
-                        <button onclick="openDeleteModal('${student.id}')" class="text-red-700 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 p-1.5 transition-colors rounded-lg hover:bg-red-100 dark:hover:bg-red-950 font-bold" title="Hapus Siswa"><i class="fas fa-trash"></i></button>
+                        <button onclick="openEditModal('${student.id}')" class="text-blue-400 hover:text-blue-300 p-1.5 transition-colors rounded-lg hover:bg-blue-950 font-bold" title="Edit Siswa"><i class="fas fa-edit"></i></button>
+                        <button onclick="openDeleteModal('${student.id}')" class="text-red-400 hover:text-red-300 p-1.5 transition-colors rounded-lg hover:bg-red-950 font-bold" title="Hapus Siswa"><i class="fas fa-trash"></i></button>
                     `;
                 regList.appendChild(tr);
             });
@@ -903,16 +842,16 @@
             
             logsToDisplay.forEach((log, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "bg-emerald-100/60 dark:bg-emerald-950/20 border-b border-emerald-200 dark:border-emerald-900/40 hover:bg-emerald-200/80 dark:hover:bg-emerald-950/40 transition-colors font-bold";
+                tr.className = "bg-emerald-950/40 border-b border-emerald-900/50 hover:bg-emerald-900/40 transition-colors font-bold";
                 tr.innerHTML = `
-                    <td class="px-3 py-3 text-center font-black text-slate-900 dark:text-slate-100">${index + 1}</td>
-                    <td class="px-3 py-3 font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <i class="fas fa-check-circle text-emerald-700 dark:text-emerald-400 text-sm shrink-0"></i>
+                    <td class="px-3 py-3 text-center font-black text-slate-300">${index + 1}</td>
+                    <td class="px-3 py-3 font-black text-slate-100 flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-400 text-sm shrink-0"></i>
                         ${log.name}
                     </td>
-                    <td class="px-3 py-3 text-slate-900 dark:text-slate-100 font-black whitespace-nowrap">${log.className}</td>
+                    <td class="px-3 py-3 text-slate-300 font-black whitespace-nowrap">${log.className}</td>
                     <td class="px-3 py-3 text-center">
-                        <span class="text-[11px] font-black text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 px-2 py-1 rounded-md border border-slate-300 dark:border-slate-700 shadow-sm whitespace-nowrap">${log.time}</span>
+                        <span class="text-[11px] font-black text-slate-200 bg-[#1f2937] px-2 py-1 rounded-md border border-slate-700 shadow-sm whitespace-nowrap">${log.time}</span>
                     `;
                 attList.appendChild(tr);
             });
@@ -1159,39 +1098,39 @@
             emptyMsg.classList.add('hidden');
             
             let theadHTML = `<tr>
-                <th class="px-3 py-3 text-center bg-slate-300 dark:bg-slate-700 sticky left-0 z-30 min-w-[50px] font-black">No</th>
-                <th class="px-3 py-3 bg-slate-300 dark:bg-slate-700 sticky left-[50px] z-30 whitespace-nowrap min-w-[180px] font-black">Nama Siswa</th>`;
+                <th class="px-3 py-3 text-center bg-[#161f30] sticky left-0 z-30 min-w-[50px] font-black border-r border-slate-800">No</th>
+                <th class="px-3 py-3 bg-[#161f30] sticky left-[50px] z-30 whitespace-nowrap min-w-[180px] font-black border-r border-slate-800">Nama Siswa</th>`;
                 
             datesForMapel.forEach((date, i) => {
                 const dParts = date.split('-');
                 const shortDate = dParts.length === 3 ? `${dParts[2]}/${dParts[1]}` : date;
-                theadHTML += `<th class="px-2.5 py-3 text-center whitespace-nowrap font-black" title="${date}">P${i+1}<br><span class="text-[10px] text-slate-700 dark:text-slate-400 font-bold">${shortDate}</span></th>`;
+                theadHTML += `<th class="px-2.5 py-3 text-center whitespace-nowrap font-black" title="${date}">P${i+1}<br><span class="text-[10px] text-slate-400 font-bold">${shortDate}</span></th>`;
             });
-            theadHTML += `<th class="px-3 py-3 text-center sticky right-0 bg-slate-300 dark:bg-slate-700 z-30 font-black">Total</th></tr>`;
+            theadHTML += `<th class="px-3 py-3 text-center sticky right-0 bg-[#161f30] z-30 font-black border-l border-slate-800">Total</th></tr>`;
             thead.innerHTML = theadHTML;
             
             let tbodyHTML = '';
             students.forEach((student, index) => {
                 let totalHadir = 0;
-                let rowHTML = `<tr class="bg-white dark:bg-slate-800 border-b border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/50 font-bold">
-                    <td class="px-3 py-3 text-center font-black sticky left-0 bg-white dark:bg-slate-800 z-10 border-r border-slate-300 dark:border-slate-700 min-w-[50px]">${index + 1}</td>
-                    <td class="px-3 py-3 font-black whitespace-nowrap sticky left-[50px] bg-white dark:bg-slate-800 z-10 border-r border-slate-300 dark:border-slate-700 min-w-[180px]">${student.name}</td>`;
+                let rowHTML = `<tr class="bg-[#111827] border-b border-slate-800 hover:bg-[#1f2937] font-bold">
+                    <td class="px-3 py-3 text-center font-black sticky left-0 bg-[#111827] z-10 border-r border-slate-800 min-w-[50px] text-slate-300">${index + 1}</td>
+                    <td class="px-3 py-3 font-black whitespace-nowrap sticky left-[50px] bg-[#111827] z-10 border-r border-slate-800 min-w-[180px] text-slate-100">${student.name}</td>`;
                     
                 datesForMapel.forEach(date => {
                     const logKey = `${date}_${selectedMapel}`;
                     const isPresent = attendanceLog[logKey] && attendanceLog[logKey].some(log => log.id === student.id);
                     if(isPresent) {
                         totalHadir++;
-                        rowHTML += `<td class="px-2.5 py-3 text-center"><i class="fas fa-check text-emerald-700 dark:text-emerald-400 font-black text-sm"></i></td>`;
+                        rowHTML += `<td class="px-2.5 py-3 text-center"><i class="fas fa-check text-emerald-400 font-black text-sm"></i></td>`;
                     } else {
-                        rowHTML += `<td class="px-2.5 py-3 text-center font-black text-slate-400 dark:text-slate-600">-</td>`;
+                        rowHTML += `<td class="px-2.5 py-3 text-center font-black text-slate-600">-</td>`;
                     }
                 });
                 
                 const percent = Math.round((totalHadir / datesForMapel.length) * 100);
-                rowHTML += `<td class="px-3 py-3 text-center sticky right-0 bg-white dark:bg-slate-800 z-10 border-l border-slate-300 dark:border-slate-700">
-                    <span class="font-black text-purple-700 dark:text-purple-400">${totalHadir}</span> 
-                    <span class="text-[10px] font-black text-slate-700 dark:text-slate-300 block">${percent}%</span>
+                rowHTML += `<td class="px-3 py-3 text-center sticky right-0 bg-[#111827] z-10 border-l border-slate-800">
+                    <span class="font-black text-purple-400">${totalHadir}</span> 
+                    <span class="text-[10px] font-black text-slate-400 block">${percent}%</span>
                 </td></tr>`;
                 tbodyHTML += rowHTML;
             });
