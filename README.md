@@ -1,4 +1,4 @@
-[sistem_absensi_pengenalan_wajah(7).html](https://github.com/user-attachments/files/32644809/sistem_absensi_pengenalan_wajah.7.html)
+[sistem_absensi_pengenalan_wajah_fixed(1).html](https://github.com/user-attachments/files/32645052/sistem_absensi_pengenalan_wajah_fixed.1.html)[sistem_absensi_pengenalan_wajah_fixed(1).html](https://github.com/user-attachments/files/32645065/sistem_absensi_pengenalan_wajah_fixed.1.html)
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -33,6 +33,12 @@
         /* Enhanced contrast and anti-glare soft gray background */
         .dark body { color: #f3f4f6 !important; background-color: #0f172a !important; }
         body { color: #111827; background-color: #f1f5f9; } /* Soft slate-100 instead of bright white */
+
+        /* Anti-flicker: sembunyikan halaman sampai class warna dari Tailwind CDN
+           selesai diterapkan, agar tidak sempat terlihat tampilan mentah/kacau
+           saat halaman baru dimuat (terutama di koneksi GitHub Pages yang lebih lambat). */
+        html { visibility: hidden; opacity: 0; }
+        html.tw-ready { visibility: visible; opacity: 1; transition: opacity 0.15s ease-in; }
 
         .video-container { position: relative; width: 100%; max-width: 640px; margin: 0 auto; border-radius: 0.75rem; overflow: hidden; background: #000; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         video, canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -70,6 +76,22 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+    </script>
+    <script>
+        // Tampilkan kembali halaman setelah Tailwind CDN selesai menerapkan
+        // semua class warna/layout (mencegah tampilan mentah/kacau sesaat).
+        function revealPage() {
+            document.documentElement.classList.add('tw-ready');
+        }
+        window.addEventListener('DOMContentLoaded', function () {
+            requestAnimationFrame(function () {
+                requestAnimationFrame(revealPage);
+            });
+        });
+        // Pengaman: kalau karena suatu hal event di atas tidak sempat jalan
+        // (misal koneksi sangat lambat), tetap tampilkan setelah 1.5 detik
+        // agar halaman tidak macet kosong.
+        setTimeout(revealPage, 1500);
     </script>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300 antialiased font-medium">
